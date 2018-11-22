@@ -9,42 +9,72 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <div></div>
           <Clock time={count} />
-          <Button label="Break" onClickHandler={this.startBreak.bind(this)} />
-          <Button label="Lunch" onClickHandler={this.startLunch.bind(this)} />
-          <Button label="Settings" id="settings_button" />
+          <Button label="Break" onClickHandler={this.startBreak.bind(this)} onSetCountdown={this.handleCountdown.bind(this.value)}/>
+          <Button label="Lunch" onClickHandler={this.startLunch.bind(this)} onSetCountdown={this.handleCountdown.bind(this)}/>
           <Button label="Reset" id="reset_button" onClickHandler={this.reset.bind(this)} />
+          <Button label="Settings" onClickHandler={this.showSettings.bind(this)} />
+          <Input  onSetCountdown={this.handleCountdown.bind(this)}/>
         </header>
       </div>
     );
   }
   startBreak() {
-    if(this.timer) {
+    // if(this.count) {
+      console.log(this.count);
       clearInterval(this.timer);
       this.setState(
         {
-        running:true,
-        count:1500,
+        running: true,
+        count: 900,
         }
       );
-    }
+    // }
   }
   startLunch() {
-    if(this.timer) {
+    // if(this.timer) {
+      console.log(this.count);
       clearInterval(this.timer);
       this.setState(
         {
-        running:true,
-        count:6000,
+        running: true,
+        count: 3600,
         }
       );
-    }
+    // }
   }
   reset() {
-    this.state = {
-      count:0,
+    this.setState(
+      {
+        running: false,
+        count: 0,
+      }
+    );
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.running !== prevState.running){
+      switch(this.state.running) {
+        case true:
+          this.handleStart();
+      }
     }
+  }
+  handleCountdown(seconds) {
+    this.setState({
+      count: seconds,
+      running: true
+    })
+  }
+  handleStart() {
+    this.timer = setInterval(() => {
+      const newCount = this.state.count - 1;
+      this.setState(
+        {count: newCount >= 0 ? newCount : 0}
+      );
+    }, 1000);
+  }
+  showSettings () {
+
   }
   constructor(props) {
     super(props);
@@ -75,6 +105,42 @@ class Clock extends React.Component {
       <div className="displayedTime">
         <h1>{this.format(time)}</h1>
       </div>
+    )
+  }
+}
+class Settings extends React.Component {
+  render () {
+    const {lunch_limit} = this.props;
+    return (
+      <div id="settings">
+        <input />
+      </div>
+    );
+  }
+}
+
+class Input extends React.Component {
+
+  onSubmit(event) {
+    event.preventDefault();
+    const strSeconds = this.refs.seconds.value;
+    if(strSeconds.match(/[0-9]/)) {
+      this.refs.seconds.value = '';
+      this.props.onSetCountdown(parseInt(strSeconds, 10));
+
+      //right here I need to save to a constant variable the value in the input
+
+
+
+    }
+  }
+
+  render() {
+    return (
+      <form ref="form" onSubmit={this.onSubmit.bind(this)}>
+        <input type="text" ref="seconds" placeholder="enter time in seconds"/>
+        <input type="submit" value="Start"></input>
+      </form>
     )
   }
 }
