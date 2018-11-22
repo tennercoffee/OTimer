@@ -8,17 +8,10 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <div class="countdown"></div>
+          <button>Break</button>
+          <button>Lunch</button>
+          <button>Settings</button>
         </header>
       </div>
     );
@@ -26,3 +19,6 @@ class App extends Component {
 }
 
 export default App;
+/////////////////////////////////////////////////////////////
+                        // EXAMPLE:
+// https://codepen.io/rebeccaeilering/pen/dRxzvR?editors=1010
